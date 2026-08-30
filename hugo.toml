@@ -1,0 +1,97 @@
+baseURL = "https://talk.metacog.co.kr/"
+languageCode = "ko-kr"
+defaultContentLanguage = "ko"
+title = "하루 한 문장 · 5분 말하기 연습"
+theme = "PaperMod"
+
+enableRobotsTXT = true
+enableEmoji = true
+summaryLength = 30
+timeZone = "Asia/Seoul"
+
+[pagination]
+  pagerSize = 12
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.highlight]
+  noClasses = false
+
+[params]
+  env = "production"
+  description = "하루 5분, 한 문장을 원어민 소리에 가깝게 말할 수 있을 때까지 반복하는 영어 말하기 연습 사이트입니다."
+  keywords = ["영어회화", "쉐도잉", "섀도잉", "영어 말하기", "하루 한 문장", "영어 발음", "영어 듣기"]
+  author = "talk.metacog.co.kr"
+  DateFormat = "2006년 1월 2일"
+  defaultTheme = "auto"
+  ShowShareButtons = false
+  ShowReadingTime = false
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = false
+  ShowPostNavLinks = true
+  ShowWordCount = false
+  ShowRssButtonInSectionTermList = false
+  ShowToc = false
+  disableSpecial1stPost = true
+  disableScrollToTop = false
+  hidemeta = false
+  comments = false
+  # 연습 기본값
+  repTarget = 30
+  sessionSeconds = 300
+
+  [params.assets]
+    disableHLJS = true
+    favicon = "/favicon.svg"
+    apple_touch_icon = "/favicon.svg"
+
+  [params.label]
+    text = "하루 한 문장"
+    icon = "/favicon.svg"
+    iconHeight = 22
+
+  [params.fuseOpts]
+    isCaseSensitive = false
+    shouldSort = true
+    location = 0
+    distance = 1000
+    threshold = 0.4
+    minMatchCharLength = 1
+    keys = ["title", "permalink", "summary", "content"]
+
+[[menu.main]]
+  identifier = "sentences"
+  name = "문장 목록"
+  url = "/sentences/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "guide"
+  name = "연습법"
+  url = "/guide/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "record"
+  name = "내 기록"
+  url = "/record/"
+  weight = 30
+
+[[menu.main]]
+  identifier = "search"
+  name = "검색"
+  url = "/search/"
+  weight = 40
+
+[taxonomies]
+  tag = "tags"
+  level = "levels"
+
+[privacy.vimeo]
+  disabled = true
+[privacy.youtube]
+  disabled = true

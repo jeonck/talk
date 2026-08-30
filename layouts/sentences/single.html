@@ -1,0 +1,224 @@
+{{- define "main" }}
+{{- $en := .Params.english | default .Title }}
+{{- $ko := .Params.korean | default "" }}
+{{- $target := site.Params.repTarget | default 30 }}
+
+<article class="post-single">
+  <header class="post-header">
+    {{ partial "breadcrumbs.html" . }}
+    <span class="p-eyebrow">오늘의 한 문장{{ with .Params.level }} · {{ . }}{{ end }}</span>
+  </header>
+
+  <section class="p-hero">
+    <h1 class="p-en" id="p-en">{{ $en }}</h1>
+    <p class="p-ko">{{ $ko }}</p>
+    <div class="p-meta-row">
+      {{- range .Params.tags }}<span class="p-tag">{{ . }}</span>{{ end }}
+    </div>
+  </section>
+
+  <!-- 5분 타이머 -->
+  <section class="p-card">
+    <h2>5분 연습 타이머 <span id="p-phase-total" style="color:var(--secondary);font-weight:500">1/4</span></h2>
+    <div class="p-steps">
+      <div class="p-step is-on">듣기</div>
+      <div class="p-step">이해</div>
+      <div class="p-step">따라 말하기</div>
+      <div class="p-step">녹음</div>
+    </div>
+    <div class="p-timer">
+      <div class="p-dial">
+        <svg width="100%" height="100%" viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="p-track" cx="60" cy="60" r="52"></circle>
+          <circle class="p-prog" id="p-prog" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="p-dial-time">
+          <b id="p-time">5:00</b>
+          <span>남은 시간</span>
+        </div>
+      </div>
+      <div class="p-timer-body">
+        <p class="p-phase-name" id="p-phase-name">1단계 · 듣기</p>
+        <p class="p-phase-hint" id="p-phase-hint">화면을 보지 말고 소리에만 집중해서 10번 들어 보세요. 뜻은 아직 생각하지 않습니다.</p>
+        <div class="p-btn-row">
+          <button class="p-btn p-btn-primary p-btn-lg" id="p-timer-start" type="button">5분 연습 시작</button>
+          <button class="p-btn" id="p-timer-reset" type="button">처음으로</button>
+          <label class="p-note" style="margin:0;display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="p-autoplay" checked> 시작하면 자동으로 들려주기
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1단계 듣기 -->
+  <section class="p-card">
+    <span class="p-eyebrow">1단계 · 듣기</span>
+    <h2>문장 듣기</h2>
+    <div class="p-listen-main">
+      <button class="p-play p-needs-tts" id="p-play" type="button" aria-label="문장 듣기">
+        <span aria-hidden="true">▶</span> 문장 듣기
+      </button>
+      <div class="p-speed" role="group" aria-label="재생 속도">
+        <button type="button" data-rate="0.6">0.6배</button>
+        <button type="button" data-rate="0.8">0.8배</button>
+        <button type="button" data-rate="1" class="is-on">보통</button>
+      </div>
+      <button class="p-btn p-needs-tts" id="p-repeat" type="button">10회 연속 듣기</button>
+      <button class="p-btn" id="p-hide" type="button" aria-pressed="false">문장 가리기</button>
+    </div>
+    <p class="p-note" id="p-listen-status" aria-live="polite"></p>
+    <p class="p-note">먼저 <b>0.6배</b>로 소리의 모양을 확인하고, <b>보통 속도</b>로 다시 들으며 어디가 붙고 어디가 사라지는지 느껴 보세요. 글자를 읽지 말고 소리를 들어야 합니다.</p>
+    <div class="p-warnbox" id="p-tts-fallback" hidden>
+      이 브라우저에서는 영어 음성을 찾지 못했습니다. Chrome, Edge, Safari 최신 버전에서 열거나 기기에 영어 음성을 설치한 뒤 다시 시도해 주세요.
+    </div>
+  </section>
+
+  {{- with .Params.chunks }}
+  <section class="p-card">
+    <h2>청크로 끊어 듣기</h2>
+    <p class="p-note" style="margin-top:0;margin-bottom:12px">문장 전체가 버겁다면 덩어리 단위로 먼저 익히세요. 각 덩어리를 눌러 듣고, 바로 따라 말합니다.</p>
+    <div class="p-chunks">
+      {{- range . }}
+      <button class="p-chunk p-needs-tts" type="button" data-en="{{ .en }}">
+        <span class="p-chunk-en">{{ .en }}</span>
+        <span class="p-chunk-ko">{{ .ko }}</span>
+        {{- with .tip }}<span class="p-chunk-tip">{{ . }}</span>{{ end }}
+      </button>
+      {{- end }}
+    </div>
+  </section>
+  {{- end }}
+
+  <!-- 2단계 이해 -->
+  <section class="p-card">
+    <span class="p-eyebrow">2단계 · 이해</span>
+    <h2>어떤 상황에서 쓰나요</h2>
+    <p style="line-height:1.85;word-break:keep-all;margin:0 0 14px">{{ .Params.situation }}</p>
+    {{- with .Params.nuance }}
+    <h3 style="margin-top:18px">뉘앙스</h3>
+    <p style="line-height:1.85;word-break:keep-all;margin:0">{{ . }}</p>
+    {{- end }}
+  </section>
+
+  {{- with .Params.pronunciation }}
+  <section class="p-card">
+    <h2>발음 포인트</h2>
+    <ul class="p-list">
+      {{- range . }}
+      <li><b>{{ .point }}</b><span>{{ .detail }}</span></li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+
+  {{- with .Params.vocab }}
+  <section class="p-card">
+    <h2>단어와 표현</h2>
+    <ul class="p-list">
+      {{- range . }}
+      <li><b>{{ .word }}</b><span>{{ .meaning }}</span></li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+
+  <!-- 3단계 따라 말하기 -->
+  <section class="p-card">
+    <span class="p-eyebrow">3단계 · 따라 말하기</span>
+    <h2>반복 횟수 세기</h2>
+    <div class="p-count-wrap">
+      <button class="p-tap" id="p-tap" type="button">
+        <span class="p-tap-num" id="p-count">0</span>
+        <span class="p-tap-label" id="p-count-label">따라 말할 때마다 눌러 주세요 · 목표 {{ $target }}회 (스페이스바)</span>
+      </button>
+      <div class="p-bar"><i id="p-bar"></i></div>
+      <div class="p-btn-row" style="justify-content:center">
+        <button class="p-btn" id="p-undo" type="button">한 번 취소</button>
+        <button class="p-btn" id="p-count-reset" type="button">0으로</button>
+      </div>
+      <p class="p-note">처음 5회는 청크 단위로, 다음 10회는 느린 속도로, 마지막 10회는 보통 속도로 원어민과 겹치듯이 말해 보세요. 눈으로 읽지 말고 <b>소리를 흉내</b> 냅니다.</p>
+    </div>
+  </section>
+
+  <!-- 4단계 녹음 -->
+  <section class="p-card" id="p-rec-card">
+    <span class="p-eyebrow">4단계 · 녹음 비교</span>
+    <h2>녹음하고 비교하기</h2>
+    <div class="p-btn-row">
+      <button class="p-btn p-btn-primary" id="p-rec" type="button">녹음 시작</button>
+      <button class="p-btn" id="p-rec-play" type="button" disabled>내 목소리 듣기</button>
+      <button class="p-btn p-needs-tts" id="p-rec-native" type="button" disabled>원어민 소리 듣기</button>
+    </div>
+    <audio class="p-audio" id="p-rec-audio" controls hidden></audio>
+    <p class="p-note" id="p-rec-note">녹음은 기기 안에서만 처리되며 어디에도 전송되거나 저장되지 않습니다.</p>
+  </section>
+
+  {{- with .Params.variations }}
+  <section class="p-card">
+    <h2>이렇게도 말합니다</h2>
+    {{- range . }}
+    <div class="p-line">
+      <button class="p-mini-play p-needs-tts" type="button" data-en="{{ .en }}" aria-label="듣기">▶</button>
+      <div class="p-line-body">
+        <div class="p-line-en">{{ .en }}</div>
+        <div class="p-line-ko">{{ .ko }}</div>
+      </div>
+    </div>
+    {{- end }}
+  </section>
+  {{- end }}
+
+  {{- with .Params.dialogue }}
+  <section class="p-card">
+    <h2>짧은 대화로 확인하기</h2>
+    {{- range . }}
+    <div class="p-line">
+      <span class="p-line-speaker">{{ .speaker }}</span>
+      <div class="p-line-body">
+        <div class="p-line-en">{{ .en }}</div>
+        <div class="p-line-ko">{{ .ko }}</div>
+      </div>
+      <button class="p-mini-play p-needs-tts" type="button" data-en="{{ .en }}" aria-label="듣기">▶</button>
+    </div>
+    {{- end }}
+  </section>
+  {{- end }}
+
+  {{- with .Content }}
+  <section class="p-card">{{ . }}</section>
+  {{- end }}
+
+  {{- $all := where site.RegularPages "Section" "sentences" }}
+  {{- $sorted := sort $all "Weight" }}
+  {{- $prev := "" }}{{ $next := "" }}
+  {{- range $i, $p := $sorted }}
+    {{- if eq $p.RelPermalink $.RelPermalink }}
+      {{- if gt $i 0 }}{{ $prev = index $sorted (sub $i 1) }}{{ end }}
+      {{- if lt (add $i 1) (len $sorted) }}{{ $next = index $sorted (add $i 1) }}{{ end }}
+    {{- end }}
+  {{- end }}
+  <nav class="p-btn-row" style="margin:26px 0 10px;justify-content:space-between">
+    <span>{{ with $prev }}<a class="p-btn" href="{{ .RelPermalink }}">← 이전 문장</a>{{ end }}</span>
+    <a class="p-btn" href="/sentences/">전체 목록</a>
+    <span>{{ with $next }}<a class="p-btn" href="{{ .RelPermalink }}">다음 문장 →</a>{{ end }}</span>
+  </nav>
+
+  <div class="p-sticky">
+    <span class="p-sticky-info" id="p-sticky-info">반복 0 / {{ $target }}회</span>
+    <div class="p-btn-row">
+      <button class="p-btn p-needs-tts" type="button" onclick="document.getElementById('p-play').click()">듣기</button>
+      <button class="p-btn p-btn-primary" type="button" onclick="document.getElementById('p-tap').click()">+1 말했어요</button>
+    </div>
+  </div>
+
+  {{- $data := dict
+        "slug" .RelPermalink
+        "title" .Title
+        "en" $en
+        "ko" $ko
+        "url" .RelPermalink
+        "target" $target }}
+  <script id="p-data" type="application/json">{{ $data | jsonify | safeJS }}</script>
+</article>
+{{- end }}

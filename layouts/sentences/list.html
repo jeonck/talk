@@ -1,0 +1,24 @@
+{{- define "main" }}
+{{- $sentences := sort (where site.RegularPages "Section" "sentences") "Weight" }}
+<div class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">{{ .Title }}</h1>
+    <div class="post-description">{{ .Description }}</div>
+  </header>
+  {{ .Content }}
+  <ul class="p-index" style="margin-top:20px">
+    {{- range $sentences }}
+    <li data-slug="{{ .RelPermalink }}">
+      <a href="{{ .RelPermalink }}">
+        <div class="p-index-en">{{ .Params.english | default .Title }}</div>
+        <div class="p-index-ko">{{ .Params.korean }}</div>
+        <div class="p-index-foot">
+          <span class="p-index-state">{{ .Params.level }}</span>
+          {{- range first 3 .Params.tags }}<span>#{{ . }}</span>{{ end }}
+        </div>
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+</div>
+{{- end }}

@@ -1,0 +1,24 @@
+{{- define "main" }}
+<div class="post-single" id="p-record">
+  <header class="post-header">
+    <h1 class="post-title">{{ .Title }}</h1>
+    <div class="post-description">{{ .Description }}</div>
+  </header>
+
+  <div class="p-stats">
+    <div class="p-stat"><b id="p-r-streak">0</b><span>연속 학습일</span></div>
+    <div class="p-stat"><b id="p-r-done">0</b><span>완료한 문장</span></div>
+    <div class="p-stat"><b id="p-r-reps">0</b><span>총 반복 횟수</span></div>
+    <div class="p-stat"><b id="p-r-sessions">0</b><span>5분 세션</span></div>
+  </div>
+
+  <p class="p-note" id="p-r-empty" hidden>아직 기록이 없습니다. <a href="/sentences/">문장 하나를 골라</a> 5분만 연습해 보세요.</p>
+  <ul class="p-index" id="p-r-list" hidden></ul>
+
+  <div class="p-card" style="margin-top:26px">
+    <h3>기록은 어디에 저장되나요</h3>
+    <p class="p-note" style="margin-top:0">이 기록은 서버가 아니라 <b>지금 사용 중인 브라우저</b>에만 저장됩니다. 로그인이 없고 아무 데도 전송되지 않습니다. 브라우저 데이터를 지우거나 다른 기기에서 접속하면 기록이 보이지 않습니다.</p>
+    <button class="p-btn" id="p-r-clear" type="button">기록 모두 지우기</button>
+  </div>
+</div>
+{{- end }}

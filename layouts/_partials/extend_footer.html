@@ -1,0 +1,5 @@
+{{- $js := resources.Get "js/practice.js" }}
+{{- if $js }}
+{{- $js = $js | minify | fingerprint "sha256" }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" defer></script>
+{{- end }}

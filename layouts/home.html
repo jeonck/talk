@@ -1,0 +1,79 @@
+{{- define "main" }}
+{{- $sentences := sort (where site.RegularPages "Section" "sentences") "Weight" }}
+
+<div class="post-single">
+  <span class="p-eyebrow">하루 5분 · 한 문장</span>
+  <h1 class="p-home-lede">많이 공부하지 말고,<br>한 문장을 제대로 익히세요.</h1>
+  <p class="p-home-sub">
+    문법, 단어, 듣기, 말하기를 따로 공부할 필요가 없습니다.
+    한 문장을 원어민의 실제 소리와 비슷하게 말할 수 있을 때까지 반복하면
+    발음과 듣기, 말하기가 <b>한꺼번에</b> 달라집니다.
+  </p>
+
+  <section class="p-hero" id="p-today">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <span class="p-eyebrow" style="margin-bottom:8px">오늘의 문장</span>
+      <span class="p-tag" id="p-streak" hidden></span>
+    </div>
+    <h2 class="p-en" id="p-today-en" style="font-size:clamp(24px,5vw,36px)">{{ with index $sentences 0 }}{{ .Params.english | default .Title }}{{ end }}</h2>
+    <p class="p-ko" id="p-today-ko">{{ with index $sentences 0 }}{{ .Params.korean }}{{ end }}</p>
+    <p class="p-note" id="p-today-situation" style="margin-bottom:16px">{{ with index $sentences 0 }}{{ .Params.situation | truncate 110 | plainify }}{{ end }}</p>
+    <a class="p-btn p-btn-primary p-btn-lg" id="p-today-link" href="{{ with index $sentences 0 }}{{ .RelPermalink }}{{ end }}">5분 연습 시작하기</a>
+    <p class="p-note" id="p-today-state"></p>
+  </section>
+
+  <section class="p-why">
+    <div>
+      <h3>① 발음이 달라집니다</h3>
+      <p>입술과 혀가 영어 소리를 내는 방법을 익히면서, 머리로만 알던 발음이 실제 소리로 바뀝니다.</p>
+    </div>
+    <div>
+      <h3>② 듣기가 달라집니다</h3>
+      <p>내가 직접 낼 수 있게 된 소리는 원어민이 빠르게 말했을 때도 훨씬 잘 들리기 시작합니다.</p>
+    </div>
+    <div>
+      <h3>③ 말이 조립 없이 나옵니다</h3>
+      <p>같은 문장을 상황과 함께 수십 번 반복하면, 문법을 조립하지 않아도 표현이 그대로 나옵니다.</p>
+    </div>
+  </section>
+
+  <section class="p-card">
+    <h2>5분은 이렇게 씁니다</h2>
+    <ul class="p-list">
+      <li><b>0:00 – 1:00 · 듣기</b><span>화면을 보지 말고 소리에만 집중해서 10번 듣습니다.</span></li>
+      <li><b>1:00 – 2:00 · 이해</b><span>상황과 뜻을 읽고, 이 문장을 말하는 장면을 머릿속에 그립니다.</span></li>
+      <li><b>2:00 – 4:00 · 따라 말하기</b><span>소리를 들은 직후 바로 따라 말합니다. 목표는 20~30회.</span></li>
+      <li><b>4:00 – 5:00 · 녹음 비교</b><span>내 목소리를 녹음해 원어민 소리와 번갈아 들어 봅니다.</span></li>
+    </ul>
+    <p class="p-note">문장 페이지의 타이머가 이 순서를 자동으로 안내합니다. <a href="/guide/five-minute-routine/">루틴 자세히 보기 →</a></p>
+  </section>
+
+  <h2 style="margin:32px 0 14px;font-size:20px">문장 목록</h2>
+  <ul class="p-index">
+    {{- range first 6 $sentences }}
+    <li data-slug="{{ .RelPermalink }}">
+      <a href="{{ .RelPermalink }}">
+        <div class="p-index-en">{{ .Params.english | default .Title }}</div>
+        <div class="p-index-ko">{{ .Params.korean }}</div>
+        <div class="p-index-foot">
+          <span class="p-index-state">{{ .Params.level }}</span>
+          {{- range first 2 .Params.tags }}<span>#{{ . }}</span>{{ end }}
+        </div>
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+  <p><a class="p-btn" href="/sentences/">문장 {{ len $sentences }}개 전체 보기 →</a></p>
+
+  {{- $all := slice }}
+  {{- range $sentences }}
+    {{- $all = $all | append (dict
+        "slug" .RelPermalink
+        "url" .RelPermalink
+        "en" (.Params.english | default .Title)
+        "ko" (.Params.korean | default "")
+        "situation" (.Params.situation | default "" | truncate 110 | plainify)) }}
+  {{- end }}
+  <script id="p-all" type="application/json">{{ $all | jsonify | safeJS }}</script>
+</div>
+{{- end }}
