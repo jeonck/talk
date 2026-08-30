@@ -87,6 +87,12 @@ timeZone = "Asia/Seoul"
   url = "/search/"
   weight = 40
 
+[[menu.main]]
+  identifier = "sponsor"
+  name = "♥ 후원"
+  url = "https://github.com/sponsors/jeonck"
+  weight = 50
+
 [taxonomies]
   tag = "tags"
   level = "levels"
