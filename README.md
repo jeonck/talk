@@ -37,7 +37,7 @@ Hugo는 **extended 버전 0.148.2 이상**이 필요합니다(PaperMod가 0.146+
 ## 문장 추가하기
 
 ```bash
-hugo new sentences/091-my-new-sentence.md
+hugo new sentences/111-my-new-sentence.md
 ```
 
 `archetypes/sentences.md` 틀이 적용됩니다. 프런트매터 필드는 다음과 같습니다.
